@@ -1,2 +1,2 @@
 # MPGI
-MPI : Message Passing Graphical Interface
+Message Passing Graphical Interface
