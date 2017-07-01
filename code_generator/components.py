@@ -18,23 +18,23 @@ T
 
 class Slot:
 
-    def __init__(self, number, code):
+    def __init__(self, id, code):
         """
 	Args:
 		param1 (int) : The slot id.
 		param2 (code) : MPI C code in this slot.
 
         """
-        self.num = number
+        self.id = id
         self.code = code
 
 class Process:
 
-    def __init__(self, number):
+    def __init__(self, id):
         """
 		param1(int) : The process id.
         """
-        self.num = number
+        self.id = id
         self.slots = []
 
     def addSlot(self, slot):

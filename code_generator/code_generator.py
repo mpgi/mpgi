@@ -15,51 +15,28 @@ Therefore, they only consider each process's code at certain time.
 
 T
 '''
+import json
 from components import Slot
 from components import Process
-import json
 
-class codeGenerator:
+class CodeGenerator:
 
-    def __init__(self, process1, process2, OutputFile):
-        """
-		param1(Process) : The process included in object code.
-		param2(process) : The process included in object code.
-		OutputFile(File stream) : output file.
-        """
-        self.proc0 = process1
-        self.proc1 = process2
-        self.f = OutputFile
+	def __init__(self, InputFile, OutputFile):
+		"""
+		IutputFile(filename) : input file.
+		OutputFile(filename) : output file.
+		"""
+		self.inputFile = InputFile
+		self.outputFile = OutputFile
 
-    def generate(self):
-        """
-	    *** WARNING *** hard coded
-        """
-        for i in range(0,3):
-            self.f.write('''	if(rank==''')
-            self.f.write(str(0))
-            self.f.write(''')
-	{
-''')
-            self.f.write('''		''')
-            self.f.write(self.proc0.slots[i].code)
-            self.f.write('''	}
-''')
+	def generate(self):
+		"""
+		*** WARNING *** hard coded
+		"""
 
-            self.f.write('''	else if(rank==''')
-            self.f.write(str(1))
-            self.f.write(''')
-	{
-''')
-            self.f.write('''		''')
-            self.f.write(self.proc1.slots[i].code)
-            self.f.write('''	}
+		outputStream = open(self.outputFile, 'w')
 
-''')
-
-f = open('object_code.c', 'w')
-
-MPIstart = '''/* program skeleton*/
+		MPIstart = '''/* program skeleton*/
 
 #include "mpi.h"
 #include <stdio.h>
@@ -67,49 +44,83 @@ MPIstart = '''/* program skeleton*/
 
 void main(int argc, char * argv[])
 {
-	int rank, size;
-	MPI_Init(&argc, &argv);
-	MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	MPI_Comm_rank(MPI_COMM_WORLD, &size);
+  int rank, size;
+  MPI_Init(&argc, &argv);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_rank(MPI_COMM_WORLD, &size);
 	
 '''
 
-s00 = Slot(0, '''Process 0, slot0
+		s00 = Slot(0, '''Process 0, slot0
 ''')
 
-s01 = Slot(0, '''Process 0, slot1
+		s01 = Slot(0, '''Process 0, slot1
 ''')
 
-s02 = Slot(0, '''Process 0, slot2
+		s02 = Slot(0, '''Process 0, slot2
 ''')
 
-s10 = Slot(1, '''Process 1, slot0
+		s10 = Slot(1, '''Process 1, slot0
 ''')
 
-s11 = Slot(1, '''Process 1, slot1
+		s11 = Slot(1, '''Process 1, slot1
 ''')
 
-s12 = Slot(1, '''Process 1, slot2
+		s12 = Slot(1, '''Process 1, slot2
 ''')
 
-p0 = Process(0)
-p0.addSlot(s00)
-p0.addSlot(s01)
-p0.addSlot(s02)
+		p0 = Process(0)
+		p0.addSlot(s00)
+		p0.addSlot(s01)
+		p0.addSlot(s02)
 
-p1 = Process(0)
-p1.addSlot(s10)
-p1.addSlot(s11)
-p1.addSlot(s12)
+		p1 = Process(0)
+		p1.addSlot(s10)
+		p1.addSlot(s11)
+		p1.addSlot(s12)
 
-MPIend = '''
-	MPI_Finalize();
+		outputStream.write(MPIstart)
+		 
+		for i in range(0,3):
+			outputStream.write('''	if(rank==''')
+			outputStream.write(str(0))
+			outputStream.write(''')
+	{
+''')
+			outputStream.write('''		''')
+			outputStream.write(p0.slots[i].code)
+			outputStream.write('''	}
+''')
+
+			outputStream.write('''	else if(rank==''')
+			outputStream.write(str(1))
+			outputStream.write(''')
+	{
+''')
+			outputStream.write('''		''')
+			outputStream.write(p1.slots[i].code)
+			outputStream.write('''	}
+
+''')
+
+		with open(self.inputFile) as data_file:
+			data = json.load(data_file)
+
+		num_process = data["num_process"]
+
+		for timeslot in data["timeslots"]:
+			for block in timeslot["blocks"]:
+				for code in block["code"]:
+					print(code)
+			
+		MPIend = '''
+  MPI_Finalize();
 }
 '''
+		outputStream.write(MPIend)
+		outputStream.close()
 
-f.write(MPIstart)
-gen = codeGenerator(p0, p1, f)
+
+gen = CodeGenerator("tutorial.json", "object_code.c")
 gen.generate()
 
-f.write(MPIend)
-f.close()
