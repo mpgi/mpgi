@@ -1,9 +1,0 @@
-language: c
-
-sudo: false # only for faster builds
-
-script:
-  - clang hello.c -o hello
-  - ./hello
-
-after_success:
