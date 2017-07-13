@@ -27,3 +27,21 @@
 *.exe
 *.out
 *.app
+
+#virtual environment
+myvenv
+
+#python compiled bytecode
+*.pyc
+
+#__pycache__
+__pycache__
+
+#sqllite3
+db.sqlite3
+
+#back-up
+*~
+
+#djnago related files
+./editor/static
