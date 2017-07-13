@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'editor',
 ]
 
 MIDDLEWARE = [
@@ -115,6 +116,10 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
+STATICFILES_DIR = (
+    '/home/lamp_developer/mpgi/editor/static/',
+)
+
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
