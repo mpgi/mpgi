@@ -1,0 +1,19 @@
+.project_list {
+}
+
+.project_list_part {
+    background-color: powderblue;
+    display: table;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    vertical-align: middle;
+    border-style: solid;
+    align-content: center;
+}
+
+body {
+    padding-left: 15px;
+    text-align: center;
+    vertical-align: middle;
+    align-content: center;
+}
