@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+
 from .forms import CreateProjectForm
 from .models import Project
 
@@ -7,6 +9,7 @@ from .models import Project
 def editor(request):
     return render(request, 'editor/editor.html', {})
 
+@login_required
 def create_project(request):
     if request.method == "POST":
         form = CreateProjectForm(request.POST)
@@ -21,6 +24,7 @@ def create_project(request):
         form = CreateProjectForm()
     return render(request, 'editor/create_project.html', {'form': form})
 
+@login_required
 def load_project(request):
     projects = Project.objects.order_by('last_modified_date') 
     return render(request, 'editor/load_project.html', {'projects': projects})

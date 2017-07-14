@@ -25,7 +25,7 @@ SECRET_KEY = '38u^jr=h$zk5^c&ptvn8^k$p=5veic&g5kbb&7q8d-c9lgl8ai'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com', 'localhost']
 
 
 # Application definition
@@ -124,3 +124,4 @@ STATICFILES_DIR = (
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+LOGIN_REDIRECT_URL = '/'
